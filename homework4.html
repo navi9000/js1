@@ -1,0 +1,147 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+
+<body>
+    <script>
+        'use strict';
+        // Задание 1
+        // Я воспользовался фрагментами своего кода из задания 6 в д/з 2
+        // Функция запрашивает и проверяет пользовательский ввод
+        function getUserNumber() {
+            // Запросить число от пользователя
+            let userInput = prompt("Введите число");
+
+            // Если пользователь ввел не число или некорректное число, вывести сообщение и вернуть пустой объект
+            if (userInput === "" || Number.isNaN(Number(userInput)) || Number(userInput < 0) || Number(userInput > 999) || !Number.isInteger(Number(userInput))) {
+                console.log("Ввод некорректный. Необходимо ввести целое число от 0 до 999.");
+                return {};
+            }
+
+            // Отбросить последнюю точку, если она есть
+            if (userInput.charAt(userInput.length - 1) == ".") {
+                userInput = userInput.slice(0, userInput.indexOf("."));
+            }
+
+            // Добавить нули в начале, если длина строки не равна 3
+            while (userInput.length < 3) {
+                userInput = "0" + userInput;
+            }
+
+            // Вернуть объект
+            return {
+                units: getDigit(userInput, 2),
+                tens: getDigit(userInput, 1),
+                hundreds: getDigit(userInput, 0),
+            }
+        }
+
+        // Функция возвращает цифру по номеру знака в числе-строке
+        function getDigit(inputString, charIndex) {
+            return Number(inputString.charAt(charIndex));
+        }
+
+        let myObj = getUserNumber();
+        console.log(myObj);
+
+        // Задание 1.1
+        // es5
+        {
+            function Product(name, price) {
+                this.name = name;
+                this.price = price;
+            }
+
+            Product.prototype.make25PercentDiscount = function () {
+                this.price = this.price * 0.75;
+            }
+
+            let myProd = new Product("computer", 100);
+            myProd.make25PercentDiscount();
+            console.log(myProd);
+        }
+        // es6
+        {
+            class Product {
+                constructor(name, price) {
+                    this.name = name;
+                    this.price = price;
+                }
+                make25PercentDiscount() {
+                    this.price = this.price * 0.75;
+                }
+            }
+
+            let myProd = new Product("computer", 100);
+            myProd.make25PercentDiscount();
+            console.log(myProd);
+        }
+
+        // Задание 1.2
+        // es5
+        {
+            function Post(author, text, date) {
+                this.author = author;
+                this.text = text;
+                this.date = date;
+            }
+
+            Post.prototype.edit = function (inputText) {
+                this.text = inputText;
+            }
+
+            function AttachedPost(author, text, date) {
+                Post.call(this, author, text, date);
+                this.highlighted = false;
+            }
+
+            AttachedPost.prototype = Object.create(Post.prototype);
+            AttachedPost.prototype.constructor = AttachedPost;
+            AttachedPost.prototype.makeTextHighlighted = function () {
+                this.highlighted = true;
+            }
+
+            let myPost = new AttachedPost("Ivan", "hello", new Date());
+            myPost.makeTextHighlighted();
+            console.log(myPost);
+        }
+
+        // es6
+        {
+            class Post {
+                constructor(author, text, date) {
+                    this.author = author;
+                    this.text = text;
+                    this.date = date;
+                }
+                edit(inputText) {
+                    this.text = inputText;
+                }
+            }
+
+            class AttachedPost extends Post {
+                constructor(author, text, date) {
+                    super(author, text, date);
+                    this.highlighted = false;
+                }
+                makeTextHighlighted() {
+                    this.highlighted = true;
+                }
+            }
+
+            let myPost = new AttachedPost("Ivan", "hello", new Date());
+            myPost.makeTextHighlighted();
+            console.log(myPost);
+        }
+
+    </script>
+
+</body>
+
+</html>
